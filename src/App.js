@@ -1,26 +1,110 @@
 import React from 'react';
-import logo from './logo.svg';
+import Cards from "./components/Cards";
+import CardForm from "./components/CardForm";
+import Card from "./components/Card";
+import { Container, Header, Button, Segment, CommentActions } from "semantic-ui-react";
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+class App extends React.Component {
+  state = {
+    cards: [
+      { id: 1, front: "Front", back: "Back", showBack: false, },
+    ],
+
+  };
+
+
+  getId = () => {
+    return Math.floor((1 + Math.random()) * 10000);
+  };
+
+
+  addCard = (cardData) => {
+    const card = { id: this.getId(), ...cardData, }
+    this.setState({ cards: [card, ...this.state.cards] })
+  };
+
+
+  editCardFront = (id) => {
+    let card = this.state.cards.filter(card => card.id === id)[0];
+    let newCard = prompt(`What would you like to change '${card.front}' to?`);
+
+    this.setState({
+      cards: this.state.cards.map(card => {
+        if (card.id == id) {
+          return { ...card, front: newCard, };
+        }
+        return card;
+      })
+    })
+  };
+
+
+  editCardBack = (id) => {
+    let card = this.state.cards.filter(card => card.id === id)[0];
+    let newBack = prompt(`What would you like to change '${card.back}' to?`);
+    debugger
+
+    this.setState({
+      cards: this.state.cards.map(card => {
+        if (card.id == id) {
+          return { ...card, back: newBack, };
+        }
+        return card;
+      })
+    })
+  };
+
+
+  removeCard = (id) => {
+    const cards = this.state.cards.filter(card => {
+      if (card.id !== id)
+        return card;
+    });
+
+    this.setState({ cards: cards, });
+  };
+
+
+  toggleCard = (id) => {
+    this.setState({
+      cards: this.state.cards.map(card => {
+        if (card.id === id) {
+          return { ...card, showBack: !card.showBack }
+        }
+        return card;
+      })
+    })
+  };
+
+
+  render() {
+    return (
+      <Container style={{ marginTop: "25px", }}>
+        <Header
+          as="h1"
+          color="violet"
+          textAlign="center"
         >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+          {this.props.title}
+        </Header>
+
+        <Cards
+          remove={this.removeCard}
+          cardsArray={this.state.cards}
+          toggleCard={this.toggleCard}
+          editCardFront={this.editCardFront}
+          editCardBack={this.editCardBack}
+        />
+
+        <CardForm
+          addCard={this.addCard}
+        />
+
+      </Container>
+    );
+  };
+};
 
 export default App;
+
