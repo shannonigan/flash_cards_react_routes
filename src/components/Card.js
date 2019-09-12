@@ -1,8 +1,8 @@
 import React from "react";
-import { Button, Container, } from "semantic-ui-react";
+import { Button, } from "semantic-ui-react";
 
 const Card = ({ id, front, back, remove, toggleCard, showBack, editCardFront, editCardBack }) => (
-
+<div classNamne="container">
   <span className="card">
 
     {!showBack ?
@@ -51,6 +51,7 @@ const Card = ({ id, front, back, remove, toggleCard, showBack, editCardFront, ed
       </div>
     }
   </span>
+  </div>
 );
 
 export default Card;
